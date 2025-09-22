@@ -1,5 +1,6 @@
-import { User } from "../models/user.js";
+import { User } from "../../models/user.js";
 import bcrypt from "bcrypt";
+import { createToken } from "./authService.js";
 
 
 export const signUp = async (req , res)=>{
@@ -43,10 +44,11 @@ export const signIn = async (req,res)=> {
         if (!comparePassword) {
             return res.status(400).json({message:"Invalid credentials"})
         }
-
+        const token = createToken(isUserLie._id)
         return res.status(200).json({
             message:"User Logged In sucessfully" , 
-            Data:isUserLie
+            Data:isUserLie,
+            Token:token
         })
         
         

@@ -1,25 +1,7 @@
-import { signUpValidationSchema } from "./validation.js"
-
-
-// export const signUpValidationRequest = (req , res , next) => {
-//     const {error} =  signUpValidationSchema.validate(req.body , {abortEarly : false})
-
-//     if (error) {
-//         return res.status(400).json({
-//             message:"validation error",
-//             Error: error.details.map((detail)=>({
-//                 field: detail.path.join("."),
-//                 message: detail.message,
-//             }))
-//         })
-//     }
-//     next();
-// }
+import { signInValidationSchema, signUpValidationSchema } from "./validation.js"
 
 // ✅ SOLUTION 2: Fix Validation Middleware
 export const signUpValidationRequest = (req, res, next) => {
-  console.log("🔍 req.body:", req.body);
-
   const result = signUpValidationSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -38,8 +20,20 @@ export const signUpValidationRequest = (req, res, next) => {
       errors
     });
   }
-
-  console.log("✅ Validation passed");
-  req.body = result.data;
   next();
 };
+
+export const signInValidationSRequest = (req,res,next) =>{
+    const {error} = signInValidationSchema.safeParse(req.body)
+
+    if (error) {
+        return res.status(400).json({
+            message:"Validation error",
+            Error: error.issues.map(err =>({
+                field:err.path.join("."),
+                message:err.message
+            }))
+        })
+    }
+    next()
+}
