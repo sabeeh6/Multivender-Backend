@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
 
 const newOrder = new mongoose.Schema({
+    userId:{
+
+    },
+    productId:{
+
+    },
+    totalPrice:{
+
+    },
     status:{
         type:String
     }

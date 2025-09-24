@@ -10,6 +10,24 @@ const myUserSchema = new mongoose.Schema({
     password:{
         type:String
     },
+    image:{
+
+    },
+    status:{
+        type:String,
+        enum:[
+            "active" , "inactive"
+        ],
+        default:"active"
+    },
+    shopInfo:{
+        name :{
+            type:String
+        },
+        description:{
+            type:String
+        }
+    },
     role:{
         type:String,
         enum:[
@@ -17,10 +35,17 @@ const myUserSchema = new mongoose.Schema({
         ],
         default:"user",
     },
-    createdAt:{
-        type:Date,
-        default:Date.now
-    },
+    // createdAt:{
+    //     type:Date,
+    //     default:Date.now
+    // },
+    // updatedAttedAt:{
+    //     type:Date,
+    //     default:Date.now
+    // },
+},{
+        timestamps: true
+
 })
 
 export const User = mongoose.model('user' , myUserSchema);
