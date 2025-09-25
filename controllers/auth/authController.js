@@ -1,6 +1,7 @@
 import { User } from "../../models/user.js";
 import bcrypt from "bcrypt";
 import { createToken } from "./authService.js";
+import { setCookies } from "../../middlewares/utilities/cookies/cookies.js";
 
 
 export const signUp = async (req , res)=>{
@@ -45,6 +46,7 @@ export const signIn = async (req,res)=> {
             return res.status(400).json({message:"Invalid credentials"})
         }
         const token = createToken(isUserLie._id)
+         setCookies(res , token)
         return res.status(200).json({
             message:"User Logged In sucessfully" , 
             Data:isUserLie,

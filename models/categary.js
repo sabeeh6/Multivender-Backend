@@ -7,8 +7,8 @@ const newCategary = new mongoose.Schema({
     description:{
         type:String
     },
-    createdAt:{},
-    updatedAt:{}
+},{
+    timestamps:true
 })
 
 export const categary = mongoose.model("categary" , newCategary)

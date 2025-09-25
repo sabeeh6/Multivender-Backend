@@ -35,14 +35,9 @@ const myUserSchema = new mongoose.Schema({
         ],
         default:"user",
     },
-    // createdAt:{
-    //     type:Date,
-    //     default:Date.now
-    // },
-    // updatedAttedAt:{
-    //     type:Date,
-    //     default:Date.now
-    // },
+    address:{
+        type:String
+    }
 },{
         timestamps: true
 

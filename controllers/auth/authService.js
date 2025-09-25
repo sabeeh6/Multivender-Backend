@@ -10,3 +10,16 @@ export const createToken = (userId) => {
         console.error("Token error" , error );        
     }
 }
+
+export const verifyToken = (token) => {
+    if (!process.env.JWT_PRIVATE_KEY_321) {
+        throw new Error("JWT Private key is missing");
+    }
+    
+    try {
+        return jwt.verify(token, process.env.JWT_PRIVATE_KEY_321);
+    } catch (error) {
+        console.error("Token verification error:", error);
+        throw new Error("Invalid or expired token");
+    }
+};

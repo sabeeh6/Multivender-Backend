@@ -70,7 +70,7 @@ export const updateUser = async(req,res) => {
         
         const updatedUser = await User.findByIdAndUpdate(id , {$set:{
             name , 
-            email:"email" , 
+            email:email , 
             status ,
             "shopInfo.name":shopInfo?.name,
             "shopInfo.description":shopInfo?.description,
@@ -109,29 +109,15 @@ export const  delUser = async(req,res) => {
     }
 }
 
-// export const changeStatus = async(res,req) => {
-//     try {
-//         const {id} = req.query;
-//         const userExist = await User.findById(id)
-        
-//     } catch (error) {
-//         console.error("Error" , error);
-//         return res.status(500).json({message:"Internal server error"})
-//     }
-// }
-// controller
 export const changeStatus = async (req, res) => {
   try {
-    const { id } = req.query; // frontend se userId aayega
+    const { id } = req.query
     if (!id) return res.status(400).json({ message: "User ID required" });
-
-    // check if user exists
     const userExist = await User.findById(id);
     if (!userExist) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // toggle status
     const newStatus = userExist.status === "active" ? "inactive" : "active";
     userExist.status = newStatus;
     await userExist.save();

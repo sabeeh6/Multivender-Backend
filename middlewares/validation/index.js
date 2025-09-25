@@ -35,3 +35,7 @@ export const signInValidationSRequest = (req,res,next) =>{
     }
     next()
 }
+
+export const isUserLoggedIn = (req,res,next) => {
+  // const exist 
+}
