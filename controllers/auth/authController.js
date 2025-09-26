@@ -33,10 +33,10 @@ export const signUp = async (req , res)=>{
 export const signIn = async (req,res)=> {
     try {
         const {email , password} = req.body
-        console.log(email , password);
+        // console.log(email , password);
         
         const isUserLie = await User.findOne({email})
-        console.log(isUserLie);
+        // console.log(isUserLie);
         
         if (!isUserLie) {
             return res.status(400).json({message:"User not exist"})
@@ -46,7 +46,12 @@ export const signIn = async (req,res)=> {
             return res.status(400).json({message:"Invalid credentials"})
         }
         const token = createToken(isUserLie._id)
-         setCookies(res , token)
+        console.log(token);
+         const set =setCookies(res , token)
+         if (!set) {
+            return res.status(401).json({message:"Can't set cookies"})
+         }
+         
         return res.status(200).json({
             message:"User Logged In sucessfully" , 
             Data:isUserLie,
@@ -59,3 +64,13 @@ export const signIn = async (req,res)=> {
         res.status(500).json({message:"Internal server error 👻"})
     }
 }
+
+export const signOut = (req, res) => {
+    clearCookies(res);
+    console.log("Cookies clear");
+    
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully"
+    });
+};

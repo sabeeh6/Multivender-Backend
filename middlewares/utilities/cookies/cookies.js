@@ -1,14 +1,14 @@
 
 export const setCookies = (res, token) => {
     const cookieOptions = {
-        httpOnly: true, // Prevent XSS attacks
-        secure: process.env.NODE_ENV === "production", // HTTPS only in production
-        sameSite: "strict", // CSRF protection
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
-        path: "/" // Available on all routes
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/"
     };
     
-    res.cookie("authToken", token, cookieOptions);
+    return res.cookie("authToken", token, cookieOptions);
 };
 
 export const clearCookies = (res) => {

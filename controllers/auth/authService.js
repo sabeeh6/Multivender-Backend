@@ -11,15 +11,18 @@ export const createToken = (userId) => {
     }
 }
 
-export const verifyToken = (token) => {
-    if (!process.env.JWT_PRIVATE_KEY_321) {
-        throw new Error("JWT Private key is missing");
-    }
+// export const verifyToken = (token) => {
+//     if (!process.env.JWT_PEIVATE_KEY_321) {
+//         throw new Error("JWT Private key is missing");
+//     }
+//     console.log("token" , token);
+//     // console.log(process.env.JWT_PEIVATE_KEY_321)
     
-    try {
-        return jwt.verify(token, process.env.JWT_PRIVATE_KEY_321);
-    } catch (error) {
-        console.error("Token verification error:", error);
-        throw new Error("Invalid or expired token");
-    }
-};
+    
+//     try {
+//         return jwt.verify(token, process.env.JWT_PRIVATE_KEY_321);
+//     } catch (error) {
+//         console.error("Token verification error:", error);
+//         throw new Error("Invalid or expired token");
+//     }
+// };
