@@ -1,3 +1,4 @@
+import { cloudinary } from "../../config/cloudinary.js";
 import { products } from "../../models/product.js";
 
 
@@ -5,11 +6,24 @@ export const createProduct = async(req,res) => {
     try {
         const {} = req.body
 
+    // 1️⃣ Upload to Cloudinary
+    const uploadResult = await cloudinary.uploader.upload_stream(
+      { folder: "products" }, // optional folder
+      async (error, result) => {
+        if (error) {
+          return res.status(500).json({ message: "Cloudinary error", error });
+        }
 
-        return res.status(200).json({
-            message:"Product created sucessfully",
-            Data:""
-        })
+        // 2️⃣ Save URL and Public ID to MongoDB
+        const product = await Product.create({
+          name: req.body.name,
+          imageUrl: result.secure_url,
+          imagePublicId: result.public_id
+        });
+
+        res.status(201).json({ success: true, product });
+      }
+    );
     } catch (error) {
         console.error("Error" , error);
         return res.status(500).json({message:"Internal server error"})

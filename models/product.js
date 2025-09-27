@@ -5,10 +5,14 @@ const newProduct = new mongoose.Schema({
         type:String
     },
     categaryId:{
-
+        type :mongoose.Schema.Types.ObjectId,
+        ref:"products",
+        required:true   
     },
     supplierId:{
-
+        type :mongoose.Schema.Types.ObjectId,
+        ref:"user",
+        required:true
     },
     price:{
         type:Number
