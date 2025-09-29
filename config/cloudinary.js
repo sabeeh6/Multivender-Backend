@@ -1,14 +1,12 @@
 import { v2 as cloudinary } from 'cloudinary';
+import dotenv from "dotenv";
+dotenv.config();
+console.log("key" ,process.env.CLOUDINARY_API_KEY );
 
-export const cloudinary =() => {
-    try {
         cloudinary.config({
-          cloud_name: process.env.CLOUD_SECRET_NAME_123,
-          api_key:    process.env.CLOUD_SECRET_API_SECRET_123,
-          api_secret: process.env.CLOUD_SECRET_API_KEY_123
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key:    process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET
         });
-    } catch (error) {
-        console.log("Cloudinary error" , error.message);
-        
-    }
-}
+
+         export const Cloud = cloudinary

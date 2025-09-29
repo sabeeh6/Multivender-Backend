@@ -1,34 +1,107 @@
-import { cloudinary } from "../../config/cloudinary.js";
+import { Cloud } from "../../config/cloudinary.js";
 import { products } from "../../models/product.js";
 
-
-export const createProduct = async(req,res) => {
+export const createProduct = async (req, res) => {
     try {
-        const {} = req.body
+        const { name, price, stock, description } = req.body;
+        const {categaryId} = req.params // URL params se
+        console.log(req.body);
+        
+        // console.log(req.user);
+        
+        const supplierId = req.user.id; // Auth middleware se
 
-    // 1️⃣ Upload to Cloudinary
-    const uploadResult = await cloudinary.uploader.upload_stream(
-      { folder: "products" }, // optional folder
-      async (error, result) => {
-        if (error) {
-          return res.status(500).json({ message: "Cloudinary error", error });
+        // Validation
+        if (!name || !price) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Name and price are required" 
+            });
         }
 
-        // 2️⃣ Save URL and Public ID to MongoDB
-        const product = await Product.create({
-          name: req.body.name,
-          imageUrl: result.secure_url,
-          imagePublicId: result.public_id
+        if (!categaryId) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Category ID is required" 
+            });
+        }
+
+        // Check if image file exists
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Product image is required" 
+            });
+        }
+
+        // ✅ Use imported "Cloud" instead of "cloudinary"
+        console.log("here0");
+        const uploadStream = (buffer) => {
+            return new Promise((resolve, reject) => {
+                const stream = Cloud.uploader.upload_stream(
+                    {
+                        folder: "products",
+                        resource_type: "image"
+                    },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+                stream.end(buffer);
+            });
+        };
+        
+        console.log("here");
+           const uploadedImages = await Promise.all(
+      req.files.map(async (file) => {
+        const result = await uploadStream(file.buffer);
+        return {
+          publicId: result.public_id
+        };
+      })
+    );
+    console.log(uploadedImages);
+    
+        
+const imagePublicIds = uploadedImages.map(img => img.publicId);
+
+        // ✅ Use imported "products" instead of "Product"
+        const product = await products.create({
+            name,
+            categaryId,
+            supplierId, 
+            price,
+            stock: stock || 0,
+            description,
+            image: imagePublicIds,
+            // imagePublicId: cloudinaryResult.public_id
         });
 
-        res.status(201).json({ success: true, product });
-      }
-    );
+        res.status(201).json({ 
+            success: true, 
+            message: "Product created successfully",
+            product 
+        });
+
     } catch (error) {
-        console.error("Error" , error);
-        return res.status(500).json({message:"Internal server error"})
+        console.error("Create product error:", error);
+        
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({
+                success: false,
+                message: "Validation error",
+                errors: Object.values(error.errors).map(err => err.message)
+            });
+        }
+
+        res.status(500).json({ 
+            success: false,
+            message: "Internal server error" 
+        });
     }
-}
+};
+
 
 export const getProducts = async(req,res) => {
     try {

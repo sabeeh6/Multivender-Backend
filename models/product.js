@@ -6,7 +6,7 @@ const newProduct = new mongoose.Schema({
     },
     categaryId:{
         type :mongoose.Schema.Types.ObjectId,
-        ref:"products",
+        ref:"categary",
         required:true   
     },
     supplierId:{
@@ -23,10 +23,11 @@ const newProduct = new mongoose.Schema({
     description:{
         type:String
     },
-    createdAt:{
-        type:Date,
-        default:Date.now()
+    image:{
+        type:[String]
     }
+},{
+    timestamps:true
 })
 
 export const products = mongoose.model("product" , newProduct)
