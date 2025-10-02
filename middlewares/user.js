@@ -29,7 +29,7 @@ export const authenticateUser = async (req, res, next) => {
 
 export const authorizeRoles = (...roles) => {
     return (req, res, next) => {
-        console.log("User",req.user);
+        // console.log("User",req.user);
         
         if (!req.user) {
             return res.status(401).json({

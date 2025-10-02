@@ -109,7 +109,7 @@ export const  delUser = async(req,res) => {
     }
 }
 
-export const changeStatus = async (req, res) => {
+export const changeSupplierStatus = async (req, res) => {
   try {
     const { id } = req.query
     if (!id) return res.status(400).json({ message: "User ID required" });
