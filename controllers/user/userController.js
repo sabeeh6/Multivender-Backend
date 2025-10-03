@@ -4,6 +4,9 @@ export const getUsers = async(req,res)=>{
     try {
         const user = await User.find({role: "user"})
         // console.log("Users",user);
+         if (!user || user.length === null) {
+            return res.status(404).json({message:"Not found"})
+        }
 
         return res.status(200).json({
             message:"Users fetch sucessfully",
@@ -23,6 +26,9 @@ export const getSuppliers = async(req,res)=>{
     try {
         const user = await User.find({role:"supplier"})
         // console.log("Supplier" ,user);
+        if (!user || user.length === null) {
+            return res.status(404).json({message:"Not found"})
+        }
 
         return res.status(200).json({
             message:"Users fetch sucessfully",

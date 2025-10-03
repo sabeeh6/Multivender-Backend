@@ -1,3 +1,4 @@
+import { readonly, success } from "zod";
 import { sendEmail } from "../../middlewares/sendEmail.js";
 import { order } from "../../models/order.js";
 import { products } from "../../models/product.js";
@@ -299,10 +300,45 @@ export const getProcessedOrders = async(req , res) => {
 export const convertStatus = async(req,res) => {
     try {
         const {orderId} = req.body
-        // const 
+        const {id} = req.user
+        const ok = id.role
+        console.log(req.user.role);
+        
+        const orderExist = await order.findById(orderId)
+        // console.log(orderExist);
+        let newStatus;
+        if (req.user.role == "supplier") {   
+             newStatus = await order.findByIdAndUpdate(orderId ,{status:"processed" }  , {new:true})
+        }
+        if (req.user.role == "superadmin") {   
+             newStatus = await order.findByIdAndUpdate(orderId ,{status:"completed" }  , {new:true})
+        }
+        console.log("newStatus " , newStatus);
+
+        return res.status(200).json({
+            success:true,
+            message:"Status convert sucessfully",
+            Data:newStatus
+        })
+        
         
     } catch (error) {
         console.error("Error" , error);
         return res.status(500).json({message:"Internal server error"})        
+    }
+}
+
+export const cancelOrder = async(req,res) =>{
+    try {
+        const {id} = req.user
+        const {} = req.body
+
+        return res.status(200).json({
+            message:"Order canceled successfully"
+        })
+        
+    } catch (error) {
+        console.error("Error" , error.message);
+        return res.status(500).json({message:"Internal server error"})
     }
 }

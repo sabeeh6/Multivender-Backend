@@ -13,6 +13,11 @@ const newOrder = new mongoose.Schema({
                 ref: "product",
                 required: true
             },
+            supplierId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "user",
+                required: true
+            },
             quantity: {
                 type: Number,
                 required: true,
